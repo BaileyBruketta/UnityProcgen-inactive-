@@ -1,0 +1,3 @@
+ItemID,ItemName,isStackable,isFood,isWeapon,isMedicine,isArmor,isMisc,Weight
+0,     Wrench,  False,      False, True,    False,     False,  False, 3
+1,     Bandage, True,       True,  False,   True,      False,  False, .1

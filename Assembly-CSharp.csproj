@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\CharacterScript.cs" />
     <Compile Include="Assets\Inventory.cs" />
     <Compile Include="Assets\ItemDetails.cs" />
     <Compile Include="Assets\TilemapManager.cs" />

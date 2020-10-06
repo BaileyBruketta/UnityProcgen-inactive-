@@ -6,32 +6,56 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public int[] ID;
-    public bool[] isStackable;
-    public int[] numberOfItems;
-    public bool[] isConsumable;
-    public bool[] isWeapon;
+    public List<int> ID;
+    public List<bool> isStackable;
+    public List<int> numberOfItems;
+    public List<bool> isFood;
+    public List<bool> isWeapon;
+    public List<bool> isMedicine;
+    public List<bool> isMisc;
 
     public string PlayerName;
 
     //for UI ------------------------------
     public RectTransform content = null;
-    public string[] itemNames = null;
-    public Sprite[] itemImages = null;
+    public List<string> itemNames = null;
+    public List<Sprite> itemImages = null;
     public Transform SpawnPoint = null;
     public GameObject item = null;
     //end UI --------------------------------
+    public GameObject[] ItemSlots;
 
     // Start is called before the first frame update
     void Start()
     {
-        ID            = new int[20];
-        isStackable   = new bool[20];
-        numberOfItems = new int[20];
-        isConsumable  = new bool[20];
-        isWeapon      = new bool[20];
+        //ID            = new int[20];
+        //isStackable   = new bool[20];
+        //numberOfItems = new int[20];
+        ///isFood        = new bool[20];
+        //isWeapon      = new bool[20];
+        //isMedicine    = new bool[20];
+        //isMisc        = new bool[20];
         PullInventoryFromText();
+    }
 
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    void AddItem(int ItemID)
+    {
+        ID.Add(ItemID);
+        isStackable.Add(false);
+        numberOfItems.Add(1);
+        isWeapon.Add(false);
+        isMedicine.Add(false);
+        isMisc.Add(false);
+    }
+
+    void TestUI()
+    {
         //UI ----------------------------------------------------------------------------------
         content.sizeDelta = new Vector2(0, 20 * 60);
         for (int i = 0; i < 20; i++)
@@ -46,13 +70,6 @@ public class Inventory : MonoBehaviour
 
         }
         //end UI -----------------------------------------------------------------------------
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void PullInventoryFromText()
@@ -63,7 +80,7 @@ public class Inventory : MonoBehaviour
         //reader.Close();
         string[] lines = File.ReadAllLines(Path);
 
-        for (int i = 0; i < ID.Length; i++)
+        for (int i = 0; i < ID.Count; i++)
         {
             if (i < lines.Length)
             {
@@ -71,7 +88,8 @@ public class Inventory : MonoBehaviour
                 {
                     string[] split = lines[i].Split(',');
                     //ID[i] = int.Parse(split[0]);
-                    ID[i] = int.Parse(string.Concat(split[0].Where(c => !char.IsWhiteSpace(c))));
+                    //ID[i] = int.Parse(string.Concat(split[0].Where(c => !char.IsWhiteSpace(c))));
+                    ID.Add(int.Parse(string.Concat(split[0].Where(c => !char.IsWhiteSpace(c)))));
                 }
             }
             else
@@ -87,15 +105,41 @@ public class Inventory : MonoBehaviour
     }
     void RenderFood()
     {
-
+        
     }
     void RenderArmor()
     {
 
     }
-    void RenderMedicine()
+    public void RenderMedicine()
     {
+        for (int i = 0; i < ItemSlots.Length; i++)
+        {
+            Destroy(ItemSlots[i]);
+        }
 
+        int ItemsOfAppropriateType = 0;
+        for (int i = 0; i < ID.Count; i++)
+        {
+            if(isMedicine[i] == true)
+            {
+                ItemsOfAppropriateType += 1;
+            }
+        }
+
+        ItemSlots = new GameObject[ItemsOfAppropriateType];
+        content.sizeDelta = new Vector2(0, ItemsOfAppropriateType * 60);
+        for (int i = 0; i < ItemsOfAppropriateType; i++)
+        {
+            float spawnY = (i * 60) - 120;
+            Vector3 pos = new Vector3(SpawnPoint.position.x, -spawnY, SpawnPoint.position.z);
+            GameObject SpawnedItem = Instantiate(item, pos, SpawnPoint.rotation);
+            SpawnedItem.transform.SetParent(SpawnPoint, false);
+            ItemDetails itemDetails = SpawnedItem.GetComponent<ItemDetails>();
+            itemDetails.text.text = itemNames[i];
+            itemDetails.image.sprite = itemImages[i];
+            ItemSlots[i] = SpawnedItem;
+        }
     }
     void RenderMisc()
     {

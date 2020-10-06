@@ -14,6 +14,7 @@ public class TilemapManager : MonoBehaviour
 
     public Vector3[] TileLocations;
     public GameObject[] GeneratedTiles;
+    public GameObject CameraObject;
 
     int RepeatTimer;
     void Start()

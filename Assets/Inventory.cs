@@ -13,6 +13,7 @@ public class Inventory : MonoBehaviour
     public List<bool> isWeapon;
     public List<bool> isMedicine;
     public List<bool> isMisc;
+    public List<float> WeightList;
 
     public string PlayerName;
 
@@ -46,12 +47,40 @@ public class Inventory : MonoBehaviour
 
     void AddItem(int ItemID)
     {
-        ID.Add(ItemID);
-        isStackable.Add(false);
+        string ItemStats = GetItemDefaults(ItemID);
+        string[] split = ItemStats.Split(',');
+
         numberOfItems.Add(1);
-        isWeapon.Add(false);
-        isMedicine.Add(false);
-        isMisc.Add(false);
+
+        ID.Add(ItemID);
+        isStackable.Add(bool.Parse(split[2]));
+    
+        isWeapon.Add(bool.Parse(split[4]));
+        isMedicine.Add(bool.Parse(split[5]));
+        isMisc.Add(bool.Parse(split[7]));
+        isFood.Add(bool.Parse(split[3]));
+        WeightList.Add(float.Parse(split[8]));
+    }
+
+    string GetItemDefaults(int id)
+    {
+        string retval = "";
+
+        string Path = "Assets/Data" + PlayerName + "/ItemTypes.txt";
+        string[] lines = File.ReadAllLines(Path);
+
+        //find item numbers
+        for (int i = 0; i < lines.Length; i++)
+        {
+            string[] split = lines[i].Split(',');
+            if (int.Parse(split[0]) == id)
+            {
+                retval = lines[i];
+            }
+
+        }
+
+        return retval;
     }
 
     void TestUI()

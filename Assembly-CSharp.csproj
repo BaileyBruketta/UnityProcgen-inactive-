@@ -66,6 +66,7 @@
     <Compile Include="Assets\CharacterScript.cs" />
     <Compile Include="Assets\Inventory.cs" />
     <Compile Include="Assets\ItemDetails.cs" />
+    <Compile Include="Assets\ItemPickup.cs" />
     <Compile Include="Assets\TilemapManager.cs" />
     <None Include="Assets\Data\ItemTypes.txt" />
     <Reference Include="Unity.Timeline.Editor">
